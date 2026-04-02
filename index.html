@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Mault Co. | Identity Sessions</title>
-  <meta name="description" content="Identity Sessions by Mault Co. — defining portraits for people becoming something new." />
+  <meta name="description" content="Identity Sessions by Mault Co. — What story do you want to tell about what happens next?" />
   <style>
     :root {
       --bg: #0e0e0d;
@@ -13,8 +13,8 @@
       --muted: #c9c3b8;
       --line: rgba(255,255,255,0.08);
       --accent: #e7d5b2;
-      --max: 1100px;
-      --radius: 12px;
+      --max: 1200px;
+      --radius: 4px; /* Sharper edges for a more technical feel */
       --font-serif: "Georgia", serif;
       --font-sans: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
     }
@@ -31,16 +31,22 @@
       overflow-x: hidden;
     }
 
-    h1, h2, h3 { font-family: var(--font-serif); font-weight: 400; color: var(--accent); }
+    h1, h2, h3, h4 { font-family: var(--font-serif); font-weight: 400; color: var(--accent); margin-top: 0; }
 
     /* Layout Utilities */
     .container { max-width: var(--max); margin: 0 auto; padding: 0 2rem; }
-    .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; }
+    .section-padding { padding: 8rem 0; }
+    
+    /* Dynamic Reveal Classes */
+    .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s ease-out, transform 0.8s ease-out; }
     .reveal.active { opacity: 1; transform: translateY(0); }
+    .delay-1 { transition-delay: 0.1s; }
+    .delay-2 { transition-delay: 0.2s; }
+    .delay-3 { transition-delay: 0.3s; }
 
     /* Hero Section */
     .hero {
-      height: 100vh;
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -48,90 +54,147 @@
       text-align: center;
       border-bottom: 1px solid var(--line);
       position: relative;
+      background: radial-gradient(circle at center, #1a1a18 0%, var(--bg) 70%);
     }
 
     .hero-hook {
-      font-size: clamp(2rem, 5vw, 3.5rem);
-      max-width: 800px;
+      font-size: clamp(2.5rem, 6vw, 4.5rem);
+      max-width: 900px;
       margin-bottom: 1.5rem;
-      line-height: 1.2;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
     }
 
     .hero-sub {
       color: var(--muted);
-      font-size: 1.1rem;
-      letter-spacing: 0.1em;
+      font-size: 0.9rem;
+      letter-spacing: 0.2em;
       text-transform: uppercase;
+      margin-bottom: 2rem;
     }
 
-    /* Identity Grid */
-    .section-padding { padding: 8rem 0; }
-    
-    .identity-grid {
+    /* Core Thesis */
+    .thesis-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 4rem;
-      align-items: center;
+      align-items: start;
     }
 
-    .image-well {
+    .thesis-text p { font-size: 1.1rem; color: var(--muted); margin-bottom: 1.5rem; }
+
+    /* Masonry Image Gallery for Original Links */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+      margin-top: 3rem;
+    }
+
+    .gallery-item {
       position: relative;
-      background: var(--panel);
       border-radius: var(--radius);
-      aspect-ratio: 4/5;
       overflow: hidden;
-      border: 1px solid var(--line);
+      aspect-ratio: 3/4;
+      background: var(--panel);
     }
 
-    /* The "Spotlight" Interaction */
-    .image-well img {
+    .gallery-item img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      filter: grayscale(100%) contrast(1.1);
-      transition: filter 0.5s ease;
+      transition: transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94), filter 0.5s ease;
+      filter: grayscale(80%);
     }
 
-    .image-well:hover img {
-      filter: grayscale(0%) contrast(1);
+    .gallery-item:hover img {
+      transform: scale(1.05);
+      filter: grayscale(0%);
     }
 
-    /* Technical Detail Section (Engineering Nod) */
-    .method-block {
+    /* The Offerings (Packages) */
+    .offer-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 2rem;
+      margin-top: 4rem;
+    }
+
+    .offer-card {
       background: var(--panel);
-      padding: 3rem;
+      padding: 3rem 2rem;
+      border: 1px solid var(--line);
       border-radius: var(--radius);
-      border-left: 4px solid var(--accent);
+      transition: transform 0.3s ease, border-color 0.3s ease;
+      display: flex;
+      flex-direction: column;
     }
 
+    .offer-card:hover {
+      transform: translateY(-10px);
+      border-color: var(--accent);
+    }
+
+    .offer-price { font-family: var(--font-sans); font-size: 1.5rem; color: var(--text); margin-bottom: 1.5rem; }
+    .offer-card ul { padding-left: 1.2rem; color: var(--muted); margin-bottom: 2rem; flex-grow: 1; }
+    .offer-card li { margin-bottom: 0.5rem; }
+
+    /* Technical Specs / Hardware */
+    .tech-specs {
+      background: var(--panel);
+      padding: 4rem;
+      border-radius: var(--radius);
+      border-left: 2px solid var(--accent);
+      margin-top: 4rem;
+    }
+
+    .tech-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      margin-top: 2rem;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+
+    /* Buttons */
     .cta-btn {
       display: inline-block;
       padding: 1rem 2.5rem;
+      background: var(--text);
+      color: var(--bg);
+      text-decoration: none;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+      border-radius: 2px;
+      transition: background 0.3s ease;
+      text-align: center;
+    }
+
+    .cta-btn:hover { background: var(--accent); }
+    
+    .cta-outline {
       background: transparent;
       color: var(--accent);
       border: 1px solid var(--accent);
-      text-decoration: none;
-      border-radius: 50px;
-      transition: all 0.3s ease;
-      font-family: var(--font-serif);
-      margin-top: 2rem;
     }
-
-    .cta-btn:hover {
-      background: var(--accent);
-      color: var(--bg);
-    }
+    .cta-outline:hover { background: var(--accent); color: var(--bg); }
 
     footer {
       padding: 4rem 0;
       border-top: 1px solid var(--line);
       text-align: center;
       color: var(--muted);
-      font-size: 0.9rem;
+      font-size: 0.85rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
     }
 
-    @media (max-width: 768px) {
-      .identity-grid { grid-template-columns: 1fr; }
+    @media (max-width: 900px) {
+      .thesis-grid { grid-template-columns: 1fr; }
+      .tech-specs { padding: 2rem; }
     }
   </style>
 </head>
@@ -139,62 +202,115 @@
 
   <section class="hero">
     <div class="container">
-      <p class="hero-sub reveal">Mault Co. / Identity Sessions</p>
-      <h1 class="hero-hook reveal">What story do you want to tell about what happens next?</h1>
-      <a href="#about" class="cta-btn reveal">Define the Narrative</a>
+      <p class="hero-sub reveal">Mault Co. / Grand Forks, ND</p>
+      <h1 class="hero-hook reveal delay-1">What story do you want to tell about what happens next?</h1>
+      <p class="reveal delay-2" style="color: var(--muted); max-width: 600px; margin: 0 auto 3rem auto;">
+        Identity isn't static. It is engineered. Our sessions are designed to isolate the signal from the noise, capturing the precise narrative of who you are becoming.
+      </p>
+      <a href="#offerings" class="cta-btn reveal delay-3">View the Offerings</a>
     </div>
   </section>
 
-  <section id="about" class="container section-padding">
-    <div class="identity-grid">
-      <div class="reveal">
-        <h2>The Sparsist Approach</h2>
-        <p>Identity isn't about adding layers; it’s about refining what remains. We strip away the "headshot" cliché to capture a singular truth: the version of you that is currently emerging.</p>
-        <p>A portrait at Mault Co. is a technical calibration of light, shadow, and intent—designed for the specific trajectory you are charting.</p>
+  <section class="container section-padding">
+    <div class="thesis-grid">
+      <div class="thesis-text reveal">
+        <h2>The Framework</h2>
+        <p>A portrait should not just preserve a memory; it should catalyze a trajectory. We approach every session as an exercise in structural refinement—stripping away visual clutter to reveal absolute intent.</p>
+        <p>Whether you are shifting careers, launching a venture, or redefining your personal brand, the image we create serves as the bedrock for your next chapter.</p>
       </div>
-      <div class="image-well reveal">
-        <img src="/api/placeholder/800/1000" alt="Identity Portrait Example" />
+      
+      <div class="reveal delay-1">
+        <div class="gallery-item">
+          <img src="YOUR_IMAGE_LINK_1.jpg" alt="Identity Session Portrait 1" />
+        </div>
+      </div>
+    </div>
+
+    <div class="gallery-grid">
+      <div class="gallery-item reveal">
+         <img src="YOUR_IMAGE_LINK_2.jpg" alt="Identity Session Portrait 2" />
+      </div>
+      <div class="gallery-item reveal delay-1">
+         <img src="YOUR_IMAGE_LINK_3.jpg" alt="Identity Session Portrait 3" />
+      </div>
+      <div class="gallery-item reveal delay-2">
+         <img src="YOUR_IMAGE_LINK_4.jpg" alt="Identity Session Portrait 4" />
+      </div>
+    </div>
+  </section>
+
+  <section id="offerings" class="container section-padding" style="border-top: 1px solid var(--line);">
+    <div class="reveal">
+      <h2>Session Architectures</h2>
+      <p style="color: var(--muted); max-width: 600px;">Select the framework that aligns with the complexity of your narrative.</p>
+    </div>
+
+    <div class="offer-grid">
+      <div class="offer-card reveal">
+        <h3>The Catalyst</h3>
+        <div class="offer-price">$XXX</div>
+        <p style="color: var(--muted); font-size: 0.9rem;">For immediate transitions requiring a singular, powerful asset.</p>
+        <ul>
+          <li>Pre-session narrative alignment</li>
+          <li>1 Location / Environment</li>
+          <li>Focus on f/2.8 background separation</li>
+          <li>3 Retouched Master Assets</li>
+        </ul>
+        <a href="#contact" class="cta-btn cta-outline">Initiate Session</a>
+      </div>
+
+      <div class="offer-card reveal delay-1">
+        <h3>The Sparsist</h3>
+        <div class="offer-price">$XXX</div>
+        <p style="color: var(--muted); font-size: 0.9rem;">A comprehensive recalibration of your visual identity.</p>
+        <ul>
+          <li>Deep-dive narrative consultation</li>
+          <li>Dynamic lighting environments</li>
+          <li>Gimbal-assisted micro-video asset</li>
+          <li>10 Retouched Master Assets</li>
+        </ul>
+        <a href="#contact" class="cta-btn cta-outline">Initiate Session</a>
       </div>
     </div>
   </section>
 
   <section class="container section-padding">
-    <div class="method-block reveal">
-      <h3>Methodological Precision</h3>
-      <p>Every session is an engineering problem with a creative solution. We analyze the context of your next chapter—be it a career shift, a creative launch, or a personal evolution—and build a visual identity that functions as a catalyst.</p>
-      <ul style="list-style: none; padding: 0; color: var(--muted);">
-        <li>— Narrative-first direction</li>
-        <li>— Minimalist technical environments</li>
-        <li>— Final assets optimized for high-impact presence</li>
-      </ul>
+    <div class="tech-specs reveal">
+      <h2>Technical Parameters</h2>
+      <p style="color: var(--muted); max-width: 700px;">
+        Great imagery is the byproduct of precise engineering. We utilize specific focal lengths and stabilization hardware to ensure the physical execution perfectly matches the conceptual intent.
+      </p>
+      <div class="tech-grid">
+        <div>
+          <h4 style="color: #fff;">Glass</h4>
+          <p>Utilizing high-compression optics (80-200mm f/2.8D) to isolate subjects and eliminate background noise, forcing the eye to the primary narrative.</p>
+        </div>
+        <div>
+          <h4 style="color: #fff;">Stabilization</h4>
+          <p>Integration of CRANE 3 3-axis gimbal systems for hybrid sessions requiring fluid, cinematic motion to complement static portraiture.</p>
+        </div>
+      </div>
     </div>
   </section>
 
   <footer>
     <div class="container">
-      <p>&copy; 2026 Mault Co. | Grand Forks, ND</p>
+      <p>Mault Co. LLC — Grand Forks, North Dakota</p>
     </div>
   </footer>
 
   <script>
-    // Intersection Observer for Scroll Reveals
-    const observerOptions = { threshold: 0.1 };
+    const observerOptions = { threshold: 0.15, rootMargin: "0px 0px -50px 0px" };
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           entry.target.classList.add('active');
+          observer.unobserve(entry.target); // Only animate once
         }
       });
     }, observerOptions);
 
     document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
-    
-    // Smooth fade for hero sub-text
-    window.addEventListener('DOMContentLoaded', () => {
-      setTimeout(() => {
-        document.querySelector('.hero-sub').classList.add('active');
-      }, 200);
-    });
   </script>
 </body>
 </html>
