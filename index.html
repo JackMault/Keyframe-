@@ -4,803 +4,197 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Mault Co. | Identity Sessions</title>
-  <meta
-    name="description"
-    content="Identity Sessions by Mault Co. — defining portraits for people becoming something new."
-  />
+  <meta name="description" content="Identity Sessions by Mault Co. — defining portraits for people becoming something new." />
   <style>
     :root {
       --bg: #0e0e0d;
       --panel: #171715;
       --text: #f2efe8;
       --muted: #c9c3b8;
-      --line: rgba(255,255,255,0.10);
+      --line: rgba(255,255,255,0.08);
       --accent: #e7d5b2;
-      --max: 1180px;
-      --radius: 18px;
-      --shadow: 0 20px 60px rgba(0,0,0,0.35);
+      --max: 1100px;
+      --radius: 12px;
+      --font-serif: "Georgia", serif;
+      --font-sans: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
     }
 
     * { box-sizing: border-box; }
-
     html { scroll-behavior: smooth; }
 
     body {
       margin: 0;
       background: var(--bg);
       color: var(--text);
-      font-family: Georgia, "Times New Roman", serif;
-      line-height: 1.5;
+      font-family: var(--font-sans);
+      line-height: 1.6;
+      overflow-x: hidden;
     }
 
-    img {
-      max-width: 100%;
-      display: block;
-    }
+    h1, h2, h3 { font-family: var(--font-serif); font-weight: 400; color: var(--accent); }
 
-    a {
-      color: inherit;
-      text-decoration: none;
-    }
+    /* Layout Utilities */
+    .container { max-width: var(--max); margin: 0 auto; padding: 0 2rem; }
+    .reveal { opacity: 0; transform: translateY(30px); transition: all 0.8s ease-out; }
+    .reveal.active { opacity: 1; transform: translateY(0); }
 
-    .container {
-      width: min(calc(100% - 32px), var(--max));
-      margin: 0 auto;
-    }
-
-    .topbar {
-      position: sticky;
-      top: 0;
-      z-index: 20;
-      backdrop-filter: blur(12px);
-      background: rgba(14,14,13,0.72);
-      border-bottom: 1px solid var(--line);
-    }
-
-    .topbar-inner {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 16px 0;
-      gap: 16px;
-    }
-
-    .brand {
-      font-size: 1rem;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      color: var(--muted);
-    }
-
-    .nav {
-      display: flex;
-      gap: 18px;
-      align-items: center;
-      flex-wrap: wrap;
-    }
-
-    .nav a {
-      color: var(--muted);
-      font-size: 0.95rem;
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 999px;
-      padding: 14px 20px;
-      min-height: 48px;
-      font-size: 0.95rem;
-      letter-spacing: 0.02em;
-      transition: 0.2s ease;
-      cursor: pointer;
-    }
-
-    .btn-primary {
-      background: var(--accent);
-      color: #151311;
-      font-weight: 600;
-    }
-
-    .btn-primary:hover {
-      transform: translateY(-1px);
-      opacity: 0.96;
-    }
-
-    .btn-secondary {
-      border: 1px solid var(--line);
-      color: var(--text);
-      background: transparent;
-    }
-
-    .btn-secondary:hover {
-      background: rgba(255,255,255,0.03);
-    }
-
+    /* Hero Section */
     .hero {
-      padding: 72px 0 48px;
-    }
-
-    .hero-grid {
-      display: grid;
-      grid-template-columns: 1.1fr 0.9fr;
-      gap: 32px;
-      align-items: center;
-    }
-
-    .eyebrow {
-      color: var(--accent);
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      font-size: 0.8rem;
-      margin-bottom: 16px;
-    }
-
-    h1 {
-      font-size: clamp(2.5rem, 7vw, 5.2rem);
-      line-height: 0.95;
-      margin: 0 0 18px;
-      font-weight: 500;
-    }
-
-    .hero-copy p {
-      color: var(--muted);
-      font-size: 1.08rem;
-      max-width: 620px;
-      margin: 0 0 28px;
-    }
-
-    .hero-actions {
+      height: 100vh;
       display: flex;
-      gap: 14px;
-      flex-wrap: wrap;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      border-bottom: 1px solid var(--line);
+      position: relative;
     }
 
-    .hero-card {
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      overflow: hidden;
-      box-shadow: var(--shadow);
+    .hero-hook {
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      max-width: 800px;
+      margin-bottom: 1.5rem;
+      line-height: 1.2;
     }
 
-    .hero-card img {
-      width: 100%;
-      height: auto;
-      display: block;
-    }
-
-    .section {
-      padding: 48px 0;
-    }
-
-    .section-header {
-      margin-bottom: 22px;
-    }
-
-    .section-header h2 {
-      font-size: clamp(1.8rem, 4vw, 3rem);
-      margin: 0 0 10px;
-      font-weight: 500;
-    }
-
-    .section-header p {
-      margin: 0;
+    .hero-sub {
       color: var(--muted);
-      max-width: 760px;
+      font-size: 1.1rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
     }
 
-    .offer {
+    /* Identity Grid */
+    .section-padding { padding: 8rem 0; }
+    
+    .identity-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 22px;
+      gap: 4rem;
+      align-items: center;
     }
 
-    .panel {
-      background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: var(--radius);
-      padding: 28px;
-      box-shadow: var(--shadow);
-    }
-
-    .panel h3 {
-      margin-top: 0;
-      margin-bottom: 14px;
-      font-size: 1.35rem;
-      font-weight: 500;
-    }
-
-    .panel p {
-      color: var(--muted);
-      margin-top: 0;
-    }
-
-    .feature-list {
-      list-style: none;
-      padding: 0;
-      margin: 18px 0 0;
-      display: grid;
-      gap: 12px;
-    }
-
-    .feature-list li {
-      padding-left: 18px;
+    .image-well {
       position: relative;
-      color: var(--text);
-    }
-
-    .feature-list li::before {
-      content: "—";
-      position: absolute;
-      left: 0;
-      color: var(--accent);
-    }
-
-    .price {
-      font-size: 2rem;
-      margin: 8px 0 0;
-    }
-
-    .price small {
-      font-size: 0.95rem;
-      color: var(--muted);
-      font-style: italic;
-    }
-
-    .gallery {
-      display: grid;
-      grid-template-columns: repeat(12, 1fr);
-      gap: 14px;
-    }
-
-    .gallery figure {
-      margin: 0;
-      overflow: hidden;
-      border-radius: 16px;
-      border: 1px solid var(--line);
       background: var(--panel);
+      border-radius: var(--radius);
+      aspect-ratio: 4/5;
+      overflow: hidden;
+      border: 1px solid var(--line);
     }
 
-    .gallery img {
+    /* The "Spotlight" Interaction */
+    .image-well img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      transition: transform 0.35s ease;
+      filter: grayscale(100%) contrast(1.1);
+      transition: filter 0.5s ease;
     }
 
-    .gallery figure:hover img {
-      transform: scale(1.02);
+    .image-well:hover img {
+      filter: grayscale(0%) contrast(1);
     }
 
-    .span-7 { grid-column: span 7; }
-    .span-5 { grid-column: span 5; }
-    .span-4 { grid-column: span 4; }
-    .span-8 { grid-column: span 8; }
-
-    .testimonials {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 18px;
-    }
-
-    blockquote {
-      margin: 0;
-    }
-
-    .quote {
-      font-size: 1.08rem;
-      margin-bottom: 18px;
-      font-style: italic;
-    }
-
-    .quote-author {
-      color: var(--muted);
-      font-size: 0.95rem;
-      font-weight: bold;
-    }
-
-    .process {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 18px;
-    }
-
-    .step-number {
-      color: var(--accent);
-      font-size: 0.82rem;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      margin-bottom: 10px;
-    }
-
-    .faq {
-      display: grid;
-      gap: 14px;
-    }
-
-    details {
+    /* Technical Detail Section (Engineering Nod) */
+    .method-block {
       background: var(--panel);
-      border: 1px solid var(--line);
-      border-radius: 16px;
-      padding: 18px 20px;
+      padding: 3rem;
+      border-radius: var(--radius);
+      border-left: 4px solid var(--accent);
     }
 
-    summary {
-      cursor: pointer;
-      font-size: 1.05rem;
+    .cta-btn {
+      display: inline-block;
+      padding: 1rem 2.5rem;
+      background: transparent;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      text-decoration: none;
+      border-radius: 50px;
+      transition: all 0.3s ease;
+      font-family: var(--font-serif);
+      margin-top: 2rem;
     }
 
-    details p {
-      color: var(--muted);
-      margin: 14px 0 0;
-    }
-
-    .cta {
-      padding: 56px 0 72px;
-    }
-
-    .cta-box {
-      background: linear-gradient(180deg, rgba(231,213,178,0.08), rgba(255,255,255,0.02));
-      border: 1px solid var(--line);
-      border-radius: 28px;
-      padding: 34px;
-      text-align: center;
-      box-shadow: var(--shadow);
-    }
-
-    .cta-box h2 {
-      margin: 0 0 12px;
-      font-size: clamp(1.8rem, 4vw, 3rem);
-      font-weight: 500;
-    }
-
-    .cta-box p {
-      margin: 0 auto 22px;
-      color: var(--muted);
-      max-width: 700px;
+    .cta-btn:hover {
+      background: var(--accent);
+      color: var(--bg);
     }
 
     footer {
+      padding: 4rem 0;
       border-top: 1px solid var(--line);
-      padding: 24px 0 40px;
+      text-align: center;
       color: var(--muted);
-      font-size: 0.95rem;
+      font-size: 0.9rem;
     }
 
-    @media (max-width: 960px) {
-      .hero-grid {
-        display: flex;
-        flex-direction: column-reverse;
-        gap: 32px;
-      }
-
-      .offer,
-      .testimonials,
-      .process {
-        grid-template-columns: 1fr;
-      }
-
-      .gallery {
-        grid-template-columns: 1fr 1fr;
-      }
-
-      .span-7, .span-5, .span-4, .span-8 {
-        grid-column: auto;
-      }
-    }
-
-    @media (max-width: 640px) {
-      .hero {
-        padding-top: 48px;
-      }
-
-      .gallery {
-        grid-template-columns: 1fr;
-      }
-
-      .topbar-inner {
-        align-items: flex-start;
-        flex-direction: column;
-      }
-
-      .nav {
-        gap: 12px;
-      }
-
-      .panel,
-      .cta-box {
-        padding: 22px;
-      }
+    @media (max-width: 768px) {
+      .identity-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
-  <header class="topbar">
-    <div class="container topbar-inner">
-      <a href="#" class="brand">Mault Co.</a>
-      <nav class="nav">
-        <a href="#offer">Offer</a>
-        <a href="#work">Work</a>
-        <a href="#testimonials">Testimonials</a>
-        <a href="#faq">FAQ</a>
-        <a class="btn btn-primary" href="mailto:YOUR_EMAIL@example.com?subject=Identity%20Session%20Inquiry">Inquire</a>
-      </nav>
+
+  <section class="hero">
+    <div class="container">
+      <p class="hero-sub reveal">Mault Co. / Identity Sessions</p>
+      <h1 class="hero-hook reveal">What story do you want to tell about what happens next?</h1>
+      <a href="#about" class="cta-btn reveal">Define the Narrative</a>
     </div>
-  </header>
+  </section>
 
-  <main>
-    <section class="hero container">
-      <div class="hero-grid">
-        <div class="hero-copy">
-          <div class="eyebrow">Identity Sessions</div>
-          <h1>Who are you when you stop posing for them?</h1>
-          <p>
-            This is not a typical photoshoot. It is a guided, cinematic immersion for
-            people ready to bridge the gap between who they are and who they are becoming.
-          </p>
-          <div class="hero-actions">
-            <a class="btn btn-primary" href="mailto:YOUR_EMAIL@example.com?subject=Identity%20Session%20Inquiry">Apply for a Session</a>
-            <a class="btn btn-secondary" href="#work">View the Work</a>
-          </div>
-        </div>
-
-        <div class="hero-card">
-          <img src="photos/mirror.jpg" alt="Mirror portrait by Mault Co." />
-        </div>
+  <section id="about" class="container section-padding">
+    <div class="identity-grid">
+      <div class="reveal">
+        <h2>The Sparsist Approach</h2>
+        <p>Identity isn't about adding layers; it’s about refining what remains. We strip away the "headshot" cliché to capture a singular truth: the version of you that is currently emerging.</p>
+        <p>A portrait at Mault Co. is a technical calibration of light, shadow, and intent—designed for the specific trajectory you are charting.</p>
       </div>
-    </section>
-
-    <section class="section container" id="offer">
-      <div class="section-header">
-        <h2>What this is</h2>
-        <p>
-          We build one intentional visual statement around who you are now and who you are stepping into.
-          The goal is simple: create images that feel true, weighty, and unmistakably yours.
-        </p>
+      <div class="image-well reveal">
+        <img src="/api/placeholder/800/1000" alt="Identity Portrait Example" />
       </div>
+    </div>
+  </section>
 
-      <div class="offer">
-        <div class="panel">
-          <h3>The Identity Session</h3>
-          <p>
-            A premium portrait experience designed for people who want more than nice photos.
-            You walk away with a set of crafted images — including one signature portrait that
-            provides sensory evidence of your evolution.
-          </p>
-          <div class="price">$3,000 <small>investment</small></div>
-        </div>
-
-        <div class="panel">
-          <h3>What’s included</h3>
-          <ul class="feature-list">
-            <li>Pre-session Identity Mapping & Vision call</li>
-            <li>Concept planning for location, wardrobe, and direction</li>
-            <li>Immersive, fully guided cinematic portrait session</li>
-            <li>10 High-End Retouched Icons</li>
-            <li>One Custom-Framed Exhibition Fine Art Print</li>
-            <li>Guided Image Reveal & Integration Session</li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <section class="section container" id="work">
-      <div class="section-header">
-        <h2>Selected work</h2>
-        <p>
-          A small set of defining images. Each one is built around atmosphere, symbolism, and emotional weight.
-        </p>
-      </div>
-
-      <div class="gallery">
-        <figure class="span-7"><img src="photos/waterface.jpg" alt="Water portrait with motion and light" /></figure>
-        <figure class="span-5"><img src="photos/capecorner.jpg" alt="Winter portrait with cloak and directional light" /></figure>
-        <figure class="span-4"><img src="photos/veiled.jpg" alt="Bridal portrait with atmospheric lighting" /></figure>
-        <figure class="span-8"><img src="photos/waterbelly.jpg" alt="Water maternity portrait" /></figure>
-        <figure class="span-5"><img src="photos/bwroots.jpg" alt="Black and white maternity portrait by roots" /></figure>
-        <figure class="span-7"><img src="photos/sittingbelly.jpg" alt="Stone maternity portrait" /></figure>
-      </div>
-    </section>
-
-    <section class="section container" id="process">
-      <div class="section-header">
-        <h2>The process</h2>
-        <p>
-          A transparent framework designed to remove uncertainty so you can simply show up.
-        </p>
-      </div>
-
-      <div class="process">
-        <div class="panel">
-          <div class="step-number">Step 01</div>
-          <h3>Clarify</h3>
-          <p>
-            We start with a conversation about what season you are in, what is changing,
-            and how you want this work to feel.
-          </p>
-        </div>
-
-        <div class="panel">
-          <div class="step-number">Step 02</div>
-          <h3>Create</h3>
-          <p>
-            The session is directed and intentional. You do not need to know how to pose
-            or perform. I guide the entire experience.
-          </p>
-        </div>
-
-        <div class="panel">
-          <div class="step-number">Step 03</div>
-          <h3>Receive</h3>
-          <p>
-            You receive a refined final set, centered around one defining image with real
-            emotional and visual weight.
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <section class="section container" id="testimonials">
-      <div class="section-header">
-        <h2>The evidence</h2>
-        <p>
-          Perspectives from those who have stepped in front of the lens.
-        </p>
-      </div>
-
-      <div class="testimonials">
-        <div class="panel">
-          <blockquote>
-            <p class="quote">
-              “I don't know if this was a wedding, or a Tarantino film. The pictures turned out better than I could have ever imagined.”
-            </p>
-            <div class="quote-author">— Mereasha G.</div>
-          </blockquote>
-        </div>
-
-        <div class="panel">
-          <blockquote>
-            <p class="quote">
-              “He has a great artistic eye to create a 'moment', but also snatches those raw and real ones that not all photographers will bother to watch for.”
-            </p>
-            <div class="quote-author">— Sophie N.</div>
-          </blockquote>
-        </div>
-
-        <div class="panel">
-          <blockquote>
-            <p class="quote">
-              “Creativity and vision to spare. He has a unique ability to catch that perfect shot that isn't posed or planned.”
-            </p>
-            <div class="quote-author">— Ben F. & Dee Dee L.</div>
-          </blockquote>
-        </div>
-      </div>
-    </section>
-
-    <section class="section container" id="faq">
-      <div class="section-header">
-        <h2>FAQ</h2>
-        <p>
-          Clarity on the logistics of the session.
-        </p>
-      </div>
-
-      <div class="faq">
-        <details>
-          <summary>Who is this for?</summary>
-          <p>
-            People in a meaningful season of change: founders, artists, parents, professionals,
-            couples, or anyone who wants images that reflect who they are becoming.
-          </p>
-        </details>
-
-        <details>
-          <summary>Do I need to know how to pose?</summary>
-          <p>
-            No. Most people do not. Direction is part of the process.
-          </p>
-        </details>
-
-        <details>
-          <summary>How many sessions do you take on?</summary>
-          <p>
-            I keep these limited so the work stays intentional. A small number of sessions are
-            accepted each month.
-          </p>
-        </details>
-
-        <details>
-          <summary>How do I inquire?</summary>
-          <p>
-            Use the inquiry button and send a short note about who you are, what season you are in,
-            and why this work matters to you.
-          </p>
-        </details>
-      </div>
-    </section>
-
-    <section class="cta container">
-      <div class="cta-box">
-        <h2>If this feels like the right time, reach out.</h2>
-        <p>
-          Identity Sessions are limited and built carefully. If you want portraits with actual
-          meaning, start the conversation.
-        </p>
-        <a class="btn btn-primary" href="mailto:YOUR_EMAIL@example.com?subject=Identity%20Session%20Inquiry">Start an Inquiry</a>
-      </div>
-    </section>
-  </main>
+  <section class="container section-padding">
+    <div class="method-block reveal">
+      <h3>Methodological Precision</h3>
+      <p>Every session is an engineering problem with a creative solution. We analyze the context of your next chapter—be it a career shift, a creative launch, or a personal evolution—and build a visual identity that functions as a catalyst.</p>
+      <ul style="list-style: none; padding: 0; color: var(--muted);">
+        <li>— Narrative-first direction</li>
+        <li>— Minimalist technical environments</li>
+        <li>— Final assets optimized for high-impact presence</li>
+      </ul>
+    </div>
+  </section>
 
   <footer>
     <div class="container">
-      Mault Co. • Grand Forks, North Dakota • Identity Sessions by inquiry
+      <p>&copy; 2026 Mault Co. | Grand Forks, ND</p>
     </div>
   </footer>
-</body>
-</html>
-i>10 High-End Retouched Icons</li>
-            <li>One Custom-Framed Exhibition Fine Art Print</li>
-            <li>Guided Image Reveal & Integration Session</li>
-          </ul>
-        </div>
-      </div>
-    </section>
 
-    <section class="section container" id="work">
-      <div class="section-header">
-        <h2>Selected work</h2>
-        <p>
-          A small set of defining images. Each one is built around atmosphere, symbolism, and emotional weight.
-        </p>
-      </div>
+  <script>
+    // Intersection Observer for Scroll Reveals
+    const observerOptions = { threshold: 0.1 };
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('active');
+        }
+      });
+    }, observerOptions);
 
-      <div class="gallery">
-        <figure class="span-7"><img src="photos/waterface.jpg" alt="Water portrait with motion and light" /></figure>
-        <figure class="span-5"><img src="photos/capecorner.jpg" alt="Winter portrait with cloak and directional light" /></figure>
-        <figure class="span-4"><img src="photos/veiled.jpg" alt="Bridal portrait with atmospheric lighting" /></figure>
-        <figure class="span-8"><img src="photos/waterbelly.jpg" alt="Water maternity portrait" /></figure>
-        <figure class="span-5"><img src="photos/bwroots.jpg" alt="Black and white maternity portrait by roots" /></figure>
-        <figure class="span-7"><img src="photos/sittingbelly.jpg" alt="Stone maternity portrait" /></figure>
-      </div>
-    </section>
-
-    <section class="section container" id="process">
-      <div class="section-header">
-        <h2>The process</h2>
-        <p>
-          A transparent framework designed to remove uncertainty so you can simply show up.
-        </p>
-      </div>
-
-      <div class="process">
-        <div class="panel">
-          <div class="step-number">Step 01</div>
-          <h3>Clarify</h3>
-          <p>
-            We start with a conversation about what season you are in, what is changing,
-            and how you want this work to feel.
-          </p>
-        </div>
-
-        <div class="panel">
-          <div class="step-number">Step 02</div>
-          <h3>Create</h3>
-          <p>
-            The session is directed and intentional. You do not need to know how to pose
-            or perform. I guide the entire experience.
-          </p>
-        </div>
-
-        <div class="panel">
-          <div class="step-number">Step 03</div>
-          <h3>Receive</h3>
-          <p>
-            You receive a refined final set, centered around one defining image with real
-            emotional and visual weight.
-          </p>
-        </div>
-      </div>
-    </section>
-
-    <section class="section container" id="testimonials">
-      <div class="section-header">
-        <h2>The evidence</h2>
-        <p>
-          Perspectives from those who have stepped in front of the lens.
-        </p>
-      </div>
-
-      <div class="testimonials">
-        <div class="panel">
-          <blockquote>
-            <p class="quote">
-              “I don't know if this was a wedding, or a Tarantino film. The pictures turned out better than I could have ever imagined.”
-            </p>
-            <div class="quote-author">— Mereasha G.</div>
-          </blockquote>
-        </div>
-
-        <div class="panel">
-          <blockquote>
-            <p class="quote">
-              “He has a great artistic eye to create a 'moment', but also snatches those raw and real ones that not all photographers will bother to watch for.”
-            </p>
-            <div class="quote-author">— Sophie N.</div>
-          </blockquote>
-        </div>
-
-        <div class="panel">
-          <blockquote>
-            <p class="quote">
-              “Creativity and vision to spare. He has a unique ability to catch that perfect shot that isn't posed or planned.”
-            </p>
-            <div class="quote-author">— Ben F. & Dee Dee L.</div>
-          </blockquote>
-        </div>
-      </div>
-    </section>
-
-    <section class="section container" id="faq">
-      <div class="section-header">
-        <h2>FAQ</h2>
-        <p>
-          Clarity on the logistics of the session.
-        </p>
-      </div>
-
-      <div class="faq">
-        <details>
-          <summary>Who is this for?</summary>
-          <p>
-            People in a meaningful season of change: founders, artists, parents, professionals,
-            couples, or anyone who wants images that reflect who they are becoming.
-          </p>
-        </details>
-
-        <details>
-          <summary>Do I need to know how to pose?</summary>
-          <p>
-            No. Most people do not. Direction is part of the process.
-          </p>
-        </details>
-
-        <details>
-          <summary>How many sessions do you take on?</summary>
-          <p>
-            I keep these limited so the work stays intentional. A small number of sessions are
-            accepted each month.
-          </p>
-        </details>
-
-        <details>
-          <summary>How do I inquire?</summary>
-          <p>
-            Use the inquiry button and send a short note about who you are, what season you are in,
-            and why this work matters to you.
-          </p>
-        </details>
-      </div>
-    </section>
-
-    <section class="cta container">
-      <div class="cta-box">
-        <h2>If this feels like the right time, reach out.</h2>
-        <p>
-          Identity Sessions are limited and built carefully. If you want portraits with actual
-          meaning, start the conversation.
-        </p>
-        <a class="btn btn-primary" href="mailto:YOUR_EMAIL@example.com?subject=Identity%20Session%20Inquiry">Start an Inquiry</a>
-      </div>
-    </section>
-  </main>
-
-  <footer>
-    <div class="container">
-      Mault Co. • Grand Forks, North Dakota • Identity Sessions by inquiry
-    </div>
-  </footer>
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    
+    // Smooth fade for hero sub-text
+    window.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        document.querySelector('.hero-sub').classList.add('active');
+      }, 200);
+    });
+  </script>
 </body>
 </html>
